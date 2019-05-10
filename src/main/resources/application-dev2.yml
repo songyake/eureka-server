@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: eureka-server
+
+##单点环境
+server:
+  port: 8763
+eureka:
+  instance:
+    hostname: eureka3
+    prefer-ip-address: true
+    lease-renewal-interval-in-seconds: 5
+    lease-expiration-duration-in-seconds: 5
+    appname: tm-eureka-server
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${server.port}}
+  server:
+    enable-self-preservation: false ##关闭自我保护模式
+    eviction-interval-timer-in-ms: 4000 ## 清理间隔（单位毫秒，默认是60*1000）
+  client:
+    register-with-eureka: false  ##eureka默认也是一个eureka客户端，集群间互相注册
+    fetch-registry: false        ##eureka默认也是一个eureka客户端，集群间互相注册
+    healthcheck:
+      enable: true
+    service-url: 
+      defaultZone: http://admin:admin@eureka1:8761/eureka,http://admin:admin@eureka2:8762/eureka
+logging:
+  path: ./logs/
+  file: eureka.log
+  level:
+    root: info
